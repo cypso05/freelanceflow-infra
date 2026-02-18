@@ -1,3 +1,4 @@
+✅ Full Working Workflow
 name: FreelanceFlow Pro CI/CD
 
 on:
@@ -95,3 +96,52 @@ jobs:
         with:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
+
+🚀 Why This Works
+✔ API build is NOT skipped
+
+This allows Oryx (Azure’s build engine) to:
+
+Detect Node automatically
+
+Generate Azure Functions metadata
+
+Avoid the runtime language error
+
+✔ Tests run correctly
+
+We use:
+
+npm ci
+
+
+instead of:
+
+npm ci --production
+
+
+So jest (devDependency) is available.
+
+🧠 Optional Optimization (Faster CI)
+
+If you want faster builds, you can cache dependencies:
+
+- uses: actions/setup-node@v3
+  with:
+    node-version: ${{ env.NODE_VERSION }}
+    cache: 'npm'
+    cache-dependency-path: api/package-lock.json
+
+✅ Expected Result
+
+After pushing to main:
+
+Azure builds frontend (/public)
+
+Azure builds API (/api)
+
+Deployment succeeds
+
+No “Function language info” error
+
+You get a working URL

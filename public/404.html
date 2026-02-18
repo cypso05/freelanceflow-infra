@@ -1,1 +1,204 @@
-<!DOCTYPE html><html><head><title>404 - Not Found</title></head><body><h1>404 - Page Not Found</h1></body></html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found | FreelanceFlow Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0078d4;
+            --primary-dark: #005a9e;
+            --gray-50: #faf9f8;
+            --gray-100: #f3f2f1;
+            --gray-200: #edebe9;
+            --gray-600: #605e5c;
+            --gray-700: #323130;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .error-card {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .error-code {
+            font-size: 120px;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 20px;
+            text-shadow: 4px 4px 0 var(--gray-100);
+        }
+
+        .error-title {
+            font-size: 32px;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        .error-message {
+            color: var(--gray-600);
+            font-size: 16px;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,120,212,0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,120,212,0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            font-size: 20px;
+        }
+
+        .search-suggestion {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 2px dashed var(--gray-200);
+        }
+
+        .search-suggestion h3 {
+            color: var(--gray-700);
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .suggestion-links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .suggestion-links a {
+            color: var(--primary);
+            text-decoration: none;
+            padding: 8px 16px;
+            background: var(--gray-50);
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+
+        .suggestion-links a:hover {
+            background: var(--gray-100);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            Oops! The page you're looking for doesn't exist or has been moved.<br>
+            Let's get you back on track.
+        </p>
+
+        <div class="error-actions">
+            <a href="/" class="btn btn-primary">
+                <span class="icon"></span>
+                Go to Dashboard
+            </a>
+            <a href="javascript:history.back()" class="btn btn-secondary">
+                <span class="icon"></span>
+                Go Back
+            </a>
+        </div>
+
+        <div class="search-suggestion">
+            <h3>You might be looking for:</h3>
+            <div class="suggestion-links">
+                <a href="/forms"> Forms</a>
+                <a href="/contracts"> Contracts</a>
+                <a href="/invoices"> Invoices</a>
+                <a href="/receipts"> Receipts</a>
+                <a href="/"> Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Optional: Log 404 errors for analytics
+        console.log('404 error:', window.location.pathname);
+        
+        // You can send this to your analytics
+        if (window.appInsights) {
+            appInsights.trackEvent({ 
+                name: '404-error', 
+                properties: { path: window.location.pathname }
+            });
+        }
+    </script>
+</body>
+</html>

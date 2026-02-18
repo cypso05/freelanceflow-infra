@@ -1,1 +1,800 @@
-<!DOCTYPE html><html><head><title>Contracts</title></head><body><h1>Contracts</h1></body></html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Generator - FreelanceFlow Pro</title>
+    <meta name="description" content="Generate professional contracts in seconds with Azure-powered templates">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #0078d4;
+            --primary-dark: #005a9e;
+            --success: #107c10;
+            --warning: #ffb900;
+            --danger: #d13438;
+            --gray-50: #faf9f8;
+            --gray-100: #f3f2f1;
+            --gray-200: #edebe9;
+            --gray-300: #e1dfdd;
+            --gray-400: #c8c6c4;
+            --gray-500: #a19f9d;
+            --gray-600: #605e5c;
+            --gray-700: #323130;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+            --radius: 4px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            color: var(--gray-600);
+            text-decoration: none;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .tier-badge {
+            background: #deecf9;
+            color: var(--primary);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Layout */
+        .contract-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .contract-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--gray-700);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0,120,212,0.2);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: var(--gray-200);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-300);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Contract Templates */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .template-card {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .template-card.selected {
+            border-color: var(--primary);
+            background: #f0f6ff;
+        }
+
+        .template-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .template-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .template-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        /* Recent Contracts */
+        .contract-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contract-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            transition: all 0.2s;
+        }
+
+        .contract-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .contract-info h4 {
+            margin-bottom: 4px;
+        }
+
+        .contract-meta {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .contract-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: var(--radius);
+        }
+
+        .icon-btn:hover {
+            background: var(--gray-100);
+        }
+
+        /* Preview */
+        .preview-container {
+            background: white;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 24px;
+            min-height: 400px;
+            font-family: 'Times New Roman', serif;
+        }
+
+        .preview-container h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+
+        .preview-section {
+            margin-bottom: 20px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* Signature Pad */
+        .signature-pad {
+            border: 2px dashed var(--gray-300);
+            border-radius: var(--radius);
+            background: white;
+            width: 100%;
+            height: 150px;
+            cursor: crosshair;
+        }
+
+        /* Loading States */
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-300) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            height: 20px;
+            border-radius: var(--radius);
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Toast */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s;
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span></span>
+                <span>FreelanceFlow Pro</span>
+                <span class="tier-badge">PRO</span>
+            </div>
+            <nav class="nav-links">
+                <a href="/">Forms</a>
+                <a href="/contracts" class="active">Contracts</a>
+                <a href="/invoices">Invoices</a>
+                <a href="/receipts">Receipts</a>
+            </nav>
+            <div class="user-menu">
+                <span> John Doe</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h1> Contract Generator</h1>
+            <div>
+                <button class="btn btn-secondary" onclick="loadContracts()"> Refresh</button>
+                <button class="btn btn-primary" onclick="generateContract()" id="generate-btn"> Generate Contract</button>
+            </div>
+        </div>
+
+        <div class="contract-layout">
+            <!-- Left Side: Contract Builder -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Contract Details</h2>
+                    <span id="field-counter">All fields required</span>
+                </div>
+                <div class="card-body">
+                    <div class="template-grid">
+                        <div class="template-card selected" data-type="freelance" onclick="selectTemplate('freelance')">
+                            <div class="template-icon"></div>
+                            <div class="template-name">Freelance</div>
+                            <div class="template-desc">Services agreement</div>
+                        </div>
+                        <div class="template-card" data-type="nda" onclick="selectTemplate('nda')">
+                            <div class="template-icon"></div>
+                            <div class="template-name">NDA</div>
+                            <div class="template-desc">Confidentiality</div>
+                        </div>
+                        <div class="template-card" data-type="service" onclick="selectTemplate('service')">
+                            <div class="template-icon"></div>
+                            <div class="template-name">Service</div>
+                            <div class="template-desc">General services</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Name *</label>
+                        <input type="text" id="client-name" placeholder="e.g., John Smith" value="Acme Corporation">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Email *</label>
+                        <input type="email" id="client-email" placeholder="client@example.com" value="contact@acme.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Client Company (Optional)</label>
+                        <input type="text" id="client-company" placeholder="e.g., Acme Inc." value="Acme Corporation">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Project/Service Description *</label>
+                        <textarea id="services" rows="4" placeholder="Describe the services to be provided...">Website development including 5 pages, responsive design, and CMS integration. Project includes 2 rounds of revisions and training session.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Payment Terms</label>
+                        <select id="payment-terms">
+                            <option value="net15">Net 15</option>
+                            <option value="net30" selected>Net 30</option>
+                            <option value="net45">Net 45</option>
+                            <option value="milestone">Milestone-based</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rate/Price</label>
+                        <input type="text" id="rate" value="$5,000">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="start-date" value="2024-03-01">
+                    </div>
+
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="end-date" value="2024-04-30">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Additional Terms (Optional)</label>
+                        <textarea id="additional-terms" rows="3" placeholder="Any special clauses or terms...">Both parties agree to respond to communications within 24 business hours. Source code will be delivered upon final payment.</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Preview & Recent -->
+            <div>
+                <!-- Live Preview -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Live Preview</h2>
+                        <button class="btn btn-secondary" onclick="downloadPDF()"> Download PDF</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="preview" class="preview-container">
+                            <h1>FREELANCE SERVICES AGREEMENT</h1>
+                            
+                            <div class="preview-section">
+                                <strong>THIS AGREEMENT</strong> is made on <span id="preview-date">March 1, 2024</span>
+                            </div>
+
+                            <div class="preview-section">
+                                <strong>BETWEEN:</strong><br>
+                                <span id="preview-client">Acme Corporation</span> ("Client")<br>
+                                AND<br>
+                                John Doe ("Freelancer")
+                            </div>
+
+                            <div class="preview-section">
+                                <strong>SERVICES:</strong><br>
+                                <span id="preview-services">Website development including 5 pages, responsive design, and CMS integration.</span>
+                            </div>
+
+                            <div class="preview-section">
+                                <strong>PAYMENT:</strong><br>
+                                Client agrees to pay <span id="preview-payment">$5,000</span> on <span id="preview-terms">Net 30</span> terms.
+                            </div>
+
+                            <div class="preview-section">
+                                <strong>TERM:</strong><br>
+                                From <span id="preview-start">March 1, 2024</span> to <span id="preview-end">April 30, 2024</span>
+                            </div>
+
+                            <div style="margin-top: 40px;">
+                                <div style="display: flex; justify-content: space-between;">
+                                    <div>
+                                        _________________________<br>
+                                        Client Signature
+                                    </div>
+                                    <div>
+                                        _________________________<br>
+                                        Freelancer Signature
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Contracts -->
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Recent Contracts</h2>
+                        <span>Last 30 days</span>
+                    </div>
+                    <div class="card-body">
+                        <div id="recent-contracts" class="contract-list">
+                            <div class="contract-item">
+                                <div class="contract-info">
+                                    <h4>Acme Corporation</h4>
+                                    <div class="contract-meta">Freelance Agreement  2 days ago</div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="icon-btn" title="View" onclick="viewContract('123')"></button>
+                                    <button class="icon-btn" title="Download" onclick="downloadContract('123')"></button>
+                                </div>
+                            </div>
+                            <div class="contract-item">
+                                <div class="contract-info">
+                                    <h4>TechStart Inc.</h4>
+                                    <div class="contract-meta">NDA  5 days ago</div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="icon-btn" title="View"></button>
+                                    <button class="icon-btn" title="Download"></button>
+                                </div>
+                            </div>
+                            <div class="contract-item">
+                                <div class="contract-info">
+                                    <h4>Design Studio</h4>
+                                    <div class="contract-meta">Service Agreement  1 week ago</div>
+                                </div>
+                                <div class="contract-actions">
+                                    <button class="icon-btn" title="View"></button>
+                                    <button class="icon-btn" title="Download"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // State
+        let selectedTemplate = 'freelance';
+        
+        // Template definitions
+        const templates = {
+            freelance: {
+                name: 'Freelance Services Agreement',
+                icon: '',
+                sections: ['parties', 'services', 'payment', 'timeline', 'ip', 'confidentiality']
+            },
+            nda: {
+                name: 'Non-Disclosure Agreement',
+                icon: '',
+                sections: ['parties', 'definition', 'obligations', 'exclusions', 'term']
+            },
+            service: {
+                name: 'Service Agreement',
+                icon: '',
+                sections: ['parties', 'scope', 'payment', 'schedule', 'warranties']
+            }
+        };
+
+        // Live preview update
+        function updatePreview() {
+            const clientName = document.getElementById('client-name').value || '[Client Name]';
+            const clientCompany = document.getElementById('client-company').value;
+            const services = document.getElementById('services').value || '[Service Description]';
+            const rate = document.getElementById('rate').value || '[Rate]';
+            const startDate = formatDate(document.getElementById('start-date').value);
+            const endDate = formatDate(document.getElementById('end-date').value);
+            
+            document.getElementById('preview-client').textContent = clientCompany || clientName;
+            document.getElementById('preview-services').textContent = services;
+            document.getElementById('preview-payment').textContent = rate;
+            document.getElementById('preview-start').textContent = startDate;
+            document.getElementById('preview-end').textContent = endDate;
+            
+            // Update terms based on template
+            const terms = document.getElementById('payment-terms').value;
+            document.getElementById('preview-terms').textContent = 
+                terms === 'net15' ? 'Net 15' : 
+                terms === 'net30' ? 'Net 30' : 
+                terms === 'net45' ? 'Net 45' : 'Milestone-based';
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return '[Date]';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        // Select template
+        function selectTemplate(type) {
+            selectedTemplate = type;
+            
+            // Update UI
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+            
+            // Update preview header
+            document.querySelector('#preview h1').textContent = templates[type].name.toUpperCase();
+            
+            showToast(`Selected: ${templates[type].name}`, 'success');
+        }
+
+        // Generate contract
+        async function generateContract() {
+            const generateBtn = document.getElementById('generate-btn');
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = ' Generating...';
+
+            try {
+                const contractData = {
+                    type: selectedTemplate,
+                    parties: {
+                        client: {
+                            name: document.getElementById('client-name').value,
+                            email: document.getElementById('client-email').value,
+                            company: document.getElementById('client-company').value
+                        },
+                        freelancer: {
+                            name: 'John Doe', // From user profile
+                            email: 'john@freelanceflow.pro'
+                        }
+                    },
+                    services: document.getElementById('services').value,
+                    payment: {
+                        rate: document.getElementById('rate').value,
+                        terms: document.getElementById('payment-terms').value
+                    },
+                    timeline: {
+                        start: document.getElementById('start-date').value,
+                        end: document.getElementById('end-date').value
+                    },
+                    additionalTerms: document.getElementById('additional-terms').value
+                };
+
+                const response = await fetch('/api/contracts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contractData)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showToast(' Contract generated successfully!', 'success');
+                    
+                    // Open contract in new tab
+                    if (result.url) {
+                        window.open(result.url, '_blank');
+                    }
+                    
+                    // Refresh recent contracts
+                    loadContracts();
+                } else {
+                    throw new Error(result.message || 'Generation failed');
+                }
+            } catch (error) {
+                showToast(' Failed to generate contract: ' + error.message, 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = ' Generate Contract';
+            }
+        }
+
+        // Load recent contracts
+        async function loadContracts() {
+            try {
+                const response = await fetch('/api/contracts');
+                const contracts = await response.json();
+                
+                const container = document.getElementById('recent-contracts');
+                
+                if (contracts.length === 0) {
+                    container.innerHTML = '<p style="text-align: center; color: var(--gray-500);">No contracts yet. Generate your first one!</p>';
+                    return;
+                }
+                
+                container.innerHTML = contracts.map(contract => `
+                    <div class="contract-item">
+                        <div class="contract-info">
+                            <h4>${contract.parties?.client?.name || 'Client'}</h4>
+                            <div class="contract-meta">
+                                ${templates[contract.type]?.name || 'Contract'}  
+                                ${new Date(contract.createdAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                        <div class="contract-actions">
+                            <button class="icon-btn" onclick="viewContract('${contract.id}')" title="View"></button>
+                            <button class="icon-btn" onclick="downloadContract('${contract.id}')" title="Download"></button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load contracts:', error);
+            }
+        }
+
+        // View contract
+        function viewContract(id) {
+            window.open(`/api/contracts?id=${id}`, '_blank');
+        }
+
+        // Download contract
+        function downloadContract(id) {
+            window.open(`/api/contracts/download/${id}`, '_blank');
+        }
+
+        // Download as PDF
+        function downloadPDF() {
+            // In production, this would generate a PDF
+            showToast('PDF generation coming soon!', 'warning');
+        }
+
+        // Toast notifications
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '' : type === 'error' ? '' : ''}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add input listeners for live preview
+            document.getElementById('client-name').addEventListener('input', updatePreview);
+            document.getElementById('client-company').addEventListener('input', updatePreview);
+            document.getElementById('services').addEventListener('input', updatePreview);
+            document.getElementById('rate').addEventListener('input', updatePreview);
+            document.getElementById('payment-terms').addEventListener('change', updatePreview);
+            document.getElementById('start-date').addEventListener('change', updatePreview);
+            document.getElementById('end-date').addEventListener('change', updatePreview);
+            
+            // Initial preview update
+            updatePreview();
+            
+            // Load recent contracts
+            loadContracts();
+        });
+    </script>
+</body>
+</html>
