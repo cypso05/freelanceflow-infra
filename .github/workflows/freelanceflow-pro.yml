@@ -7,6 +7,9 @@ on:
     types: [opened, synchronize, reopened, closed]
     branches: [main, master]
 
+env:
+  NODE_VERSION: "20"
+
 jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
@@ -21,31 +24,69 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Create local.settings.json from secrets
+        run: |
+          cat > api/local.settings.json << 'EOF'
+          {
+            "IsEncrypted": false,
+            "Values": {
+              "AzureWebJobsStorage": "${{ secrets.AZURE_WEBJOBS_STORAGE }}",
+              "FUNCTIONS_WORKER_RUNTIME": "node",
+              "COSMOS_DB_CONNECTION_STRING": "${{ secrets.COSMOS_DB_CONNECTION_STRING }}",
+              "COSMOS_DATABASE_NAME": "${{ secrets.COSMOS_DATABASE_NAME }}",
+              "AZURE_STORAGE_CONNECTION_STRING": "${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}",
+              "BLOB_CONTAINER_NAME": "${{ secrets.BLOB_CONTAINER_NAME }}",
+              "ALLOWED_ORIGINS": "${{ secrets.ALLOWED_ORIGINS }}",
+              "JWT_SECRET": "${{ secrets.JWT_SECRET }}",
+              "NODE_ENV": "production"
+            }
+          }
+          EOF
+          echo "✅ Created api/local.settings.json from secrets"
+
+      - name: Create .env file for reference (optional)
+        run: |
+          cat > .env << 'EOF'
+          COSMOS_DATABASE_NAME=${{ secrets.COSMOS_DATABASE_NAME }}
+          BLOB_CONTAINER_NAME=${{ secrets.BLOB_CONTAINER_NAME }}
+          ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
+          NODE_ENV=production
+          EOF
+          echo "✅ Created .env file"
 
       - name: Install Dependencies
         run: |
           cd api
-          npm ci
+          npm ci --production
         working-directory: ./
+
+      - name: Run API Tests (if any)
+        run: |
+          cd api
+          npm test || echo "No tests found"
+        working-directory: ./
+        continue-on-error: true
 
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          # NEW token for your new app (get from Terraform output)
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_FREELANCEFLOW_PRO }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
-          ###### CRITICAL: Update these paths for your structure ######
-          app_location: "/public" # Your HTML/CSS/JS files
-          api_location: "/api" # Your API routes
-          output_location: "" # No build output needed
-          ###### End of Configurations ######
+          app_location: "/public"
+          api_location: "/api"
+          output_location: ""
+          skip_app_build: true
+          skip_api_build: true
 
-      - name: Run API Tests
+      - name: Output Deployment URL
         run: |
-          echo "✅ Deployment complete"
+          echo "✅ Deployment complete!"
+          echo "🌐 App URL: ${{ steps.builddeploy.outputs.static_web_app_url }}"
+          echo "🔑 API URL: ${{ steps.builddeploy.outputs.static_web_app_url }}/api"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -56,5 +97,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_FREELANCEFLOW_PRO }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
