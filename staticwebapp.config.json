@@ -1,11 +1,35 @@
-{ 
-  "routes": [ 
-    { 
-      "route": "/api/*", 
-      "allowedRoles": ["anonymous"] 
-    } 
-  ], 
-  "navigationFallback": { 
-    "rewrite": "/404.html" 
-  } 
-} 
+{
+  "routes": [
+    {
+      "route": "/api/*",
+      "allowedRoles": ["anonymous"]
+    },
+    {
+      "route": "/",
+      "rewrite": "/index.html"
+    },
+    {
+      "route": "/forms",
+      "rewrite": "/form-viewer.html"
+    },
+    {
+      "route": "/contracts",
+      "rewrite": "/contracts.html"
+    },
+    {
+      "route": "/invoices",
+      "rewrite": "/invoices.html"
+    },
+    {
+      "route": "/receipts",
+      "rewrite": "/receipts.html"
+    },
+    {
+      "route": "/dashboard",
+      "rewrite": "/dashboard.html"
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/404.html"
+  }
+}
