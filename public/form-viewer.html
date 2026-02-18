@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form - FreelanceFlow Pro</title>
+    <meta name="description" content="Complete this client intake form">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #0078d4;
+            --primary-dark: #005a9e;
+            --success: #107c10;
+            --warning: #ffb900;
+            --danger: #d13438;
+            --gray-50: #faf9f8;
+            --gray-100: #f3f2f1;
+            --gray-200: #edebe9;
+            --gray-300: #e1dfdd;
+            --gray-400: #c8c6c4;
+            --gray-500: #a19f9d;
+            --gray-600: #605e5c;
+            --gray-700: #323130;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Brand Header */
+        .brand-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            display: inline-block;
+            background: white;
+            padding: 15px 30px;
+            border-radius: 60px;
+            box-shadow: var(--shadow-lg);
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .brand-logo span {
+            margin-right: 10px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .form-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .form-description {
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .form-body {
+            padding: 40px;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray-700);
+            font-size: 16px;
+        }
+
+        .field-required {
+            color: var(--danger);
+            margin-left: 4px;
+        }
+
+        .field-help {
+            display: block;
+            color: var(--gray-500);
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            font-size: 16px;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,120,212,0.1);
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 3px dashed var(--gray-300);
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            background: var(--gray-50);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--primary);
+            background: #f0f6ff;
+        }
+
+        .file-upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .file-upload-text {
+            color: var(--gray-600);
+            margin-bottom: 5px;
+        }
+
+        .file-upload-hint {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .file-preview {
+            margin-top: 15px;
+            padding: 15px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-preview.active {
+            display: flex;
+        }
+
+        .file-preview-icon {
+            font-size: 24px;
+        }
+
+        .file-preview-info {
+            flex: 1;
+        }
+
+        .file-preview-name {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .file-preview-size {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .file-preview-remove {
+            color: var(--danger);
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: var(--radius);
+        }
+
+        .file-preview-remove:hover {
+            background: rgba(209, 52, 56, 0.1);
+        }
+
+        /* Signature Pad */
+        .signature-container {
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: white;
+        }
+
+        .signature-canvas {
+            width: 100%;
+            height: 200px;
+            background: white;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .signature-toolbar {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .signature-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius);
+            background: white;
+            color: var(--gray-700);
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .signature-btn:hover {
+            background: var(--gray-100);
+        }
+
+        /* Checkbox/Radio */
+        .checkbox-group,
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-item,
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"],
+        .radio-item input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        /* Submit Section */
+        .form-actions {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid var(--gray-200);
+        }
+
+        .btn-submit {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(16, 124, 16, 0.3);
+        }
+
+        .btn-submit:hover {
+            background: #0b5e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 124, 16, 0.4);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 6px;
+            background: var(--gray-200);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--radius);
+            padding: 16px 24px;
+            margin-top: 8px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Loading State */
+        .loading-skeleton {
+            padding: 40px;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-300) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius);
+            height: 30px;
+            margin-bottom: 20px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Thank You Page */
+        .thank-you {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .thank-you-icon {
+            font-size: 80px;
+            color: var(--success);
+            margin-bottom: 20px;
+        }
+
+        .thank-you-title {
+            font-size: 36px;
+            color: var(--gray-700);
+            margin-bottom: 16px;
+        }
+
+        .thank-you-message {
+            color: var(--gray-500);
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Brand Header -->
+        <div class="brand-header">
+            <div class="brand-logo">
+                <span></span> FreelanceFlow Pro
+            </div>
+        </div>
+
+        <!-- Form Container -->
+        <div class="form-card" id="form-container">
+            <!-- Loading State -->
+            <div id="loading-state" class="loading-skeleton">
+                <div class="skeleton" style="width: 60%;"></div>
+                <div class="skeleton" style="width: 40%;"></div>
+                <div class="skeleton" style="height: 200px;"></div>
+                <div class="skeleton" style="width: 80%;"></div>
+            </div>
+
+            <!-- Form Content (hidden initially) -->
+            <div id="form-content" style="display: none;">
+                <div class="form-header" id="form-header">
+                    <h1 class="form-title" id="form-title">Loading Form...</h1>
+                    <p class="form-description" id="form-description">Please fill out the information below</p>
+                </div>
+
+                <div class="form-body">
+                    <!-- Progress Bar -->
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                    </div>
+
+                    <!-- Form Fields -->
+                    <form id="dynamic-form" onsubmit="submitForm(event)">
+                        <div id="fields-container"></div>
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit" id="submit-btn">
+                                 Submit Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Thank You State (hidden initially) -->
+            <div id="thank-you-state" style="display: none;">
+                <div class="thank-you">
+                    <div class="thank-you-icon"></div>
+                    <h1 class="thank-you-title">Thank You!</h1>
+                    <p class="thank-you-message">Your form has been submitted successfully.</p>
+                    <button class="btn-submit" style="width: auto; padding: 12px 40px;" onclick="window.location.href='/forms'">
+                         Create Your Own Form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        // Get form ID from URL
+        const formId = window.location.pathname.split('/').pop();
+        let formData = null;
+        let fieldValues = {};
+        let signaturePad = null;
+        let currentFile = null;
+
+        // Load form on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (formId && formId !== 'form-viewer.html') {
+                await loadForm(formId);
+            } else {
+                showError('No form ID provided');
+            }
+        });
+
+        // Load form from API
+        async function loadForm(id) {
+            try {
+                const response = await fetch(`/api/forms?id=${id}`);
+                if (!response.ok) {
+                    throw new Error('Form not found');
+                }
+                
+                formData = await response.json();
+                renderForm();
+                
+            } catch (error) {
+                showError('Failed to load form: ' + error.message);
+            }
+        }
+
+        // Render form fields
+        function renderForm() {
+            // Hide loading, show form
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('form-content').style.display = 'block';
+            
+            // Set form title
+            document.getElementById('form-title').textContent = 
+                formData.schema?.title || 'Client Intake Form';
+            document.getElementById('form-description').textContent = 
+                formData.schema?.description || 'Please fill out the information below';
+            
+            // Render fields
+            const container = document.getElementById('fields-container');
+            const fields = formData.schema?.fields || [];
+            
+            container.innerHTML = fields.map(field => renderField(field)).join('');
+            
+            // Initialize any special fields
+            initializeSignatureFields();
+            initializeFileUploads();
+        }
+
+        // Render individual field
+        function renderField(field) {
+            const fieldId = field.id || field.name;
+            const isRequired = field.required ? '<span class="field-required">*</span>' : '';
+            const helpText = field.helpText ? `<span class="field-help">${field.helpText}</span>` : '';
+            
+            let fieldHtml = '';
+            
+            switch(field.type) {
+                case 'textarea':
+                    fieldHtml = `
+                        <textarea id="${fieldId}" name="${fieldId}" 
+                            placeholder="${field.placeholder || ''}"
+                            ${field.required ? 'required' : ''}>${fieldValues[fieldId] || ''}</textarea>
+                    `;
+                    break;
+                    
+                case 'select':
+                    fieldHtml = `
+                        <select id="${fieldId}" name="${fieldId}" ${field.required ? 'required' : ''}>
+                            <option value="">Select an option</option>
+                            ${field.options?.map(opt => 
+                                `<option value="${opt}" ${fieldValues[fieldId] === opt ? 'selected' : ''}>${opt}</option>`
+                            ).join('')}
+                        </select>
+                    `;
+                    break;
+                    
+                case 'file':
+                    fieldHtml = `
+                        <div class="file-upload-area" onclick="document.getElementById('${fieldId}').click()">
+                            <div class="file-upload-icon"></div>
+                            <div class="file-upload-text">Click or drag to upload file</div>
+                            <div class="file-upload-hint">Max size: 25MB</div>
+                            <input type="file" id="${fieldId}" name="${fieldId}" 
+                                style="display: none;" onchange="handleFileSelect(this, '${fieldId}')">
+                        </div>
+                        <div class="file-preview" id="preview-${fieldId}">
+                            <span class="file-preview-icon"></span>
+                            <div class="file-preview-info">
+                                <div class="file-preview-name" id="filename-${fieldId}"></div>
+                                <div class="file-preview-size" id="filesize-${fieldId}"></div>
+                            </div>
+                            <span class="file-preview-remove" onclick="removeFile('${fieldId}')"> Remove</span>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'signature':
+                    fieldHtml = `
+                        <div class="signature-container">
+                            <canvas class="signature-canvas" id="sig-${fieldId}" width="700" height="200"></canvas>
+                            <div class="signature-toolbar">
+                                <button type="button" class="signature-btn" onclick="clearSignature('sig-${fieldId}')">
+                                    <span></span> Clear
+                                </button>
+                                <button type="button" class="signature-btn" onclick="saveSignature('${fieldId}')">
+                                    <span></span> Save
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                default:
+                    fieldHtml = `
+                        <input type="${field.type || 'text'}" id="${fieldId}" name="${fieldId}" 
+                            value="${fieldValues[fieldId] || ''}"
+                            placeholder="${field.placeholder || ''}"
+                            ${field.required ? 'required' : ''}>
+                    `;
+            }
+            
+            return `
+                <div class="form-group">
+                    <label class="field-label">
+                        ${field.label || field.name}
+                        ${isRequired}
+                    </label>
+                    ${helpText}
+                    ${fieldHtml}
+                </div>
+            `;
+        }
+
+        // Initialize signature fields
+        function initializeSignatureFields() {
+            const canvases = document.querySelectorAll('canvas[id^="sig-"]');
+            canvases.forEach(canvas => {
+                const signaturePad = new SignaturePad(canvas);
+                canvas.signaturePad = signaturePad;
+                
+                // Adjust for device pixel ratio
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+                
+                // Load saved signature if exists
+                const fieldId = canvas.id.replace('sig-', '');
+                if (fieldValues[fieldId]) {
+                    signaturePad.fromDataURL(fieldValues[fieldId]);
+                }
+            });
+        }
+
+        // Initialize file uploads
+        function initializeFileUploads() {
+            const fileInputs = document.querySelectorAll('input[type="file"]');
+            fileInputs.forEach(input => {
+                input.addEventListener('change', (e) => {
+                    handleFileSelect(e.target, e.target.id);
+                });
+            });
+        }
+
+        // Handle file selection
+        async function handleFileSelect(input, fieldId) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            // Check file size (25MB max)
+            if (file.size > 25 * 1024 * 1024) {
+                showToast('File too large. Max size is 25MB', 'error');
+                input.value = '';
+                return;
+            }
+            
+            // Show preview
+            const preview = document.getElementById(`preview-${fieldId}`);
+            const fileName = document.getElementById(`filename-${fieldId}`);
+            const fileSize = document.getElementById(`filesize-${fieldId}`);
+            
+            fileName.textContent = file.name;
+            fileSize.textContent = formatFileSize(file.size);
+            preview.classList.add('active');
+            
+            // Store file for submission
+            fieldValues[fieldId] = file;
+            currentFile = file;
+            
+            updateProgress();
+        }
+
+        // Remove file
+        function removeFile(fieldId) {
+            const input = document.getElementById(fieldId);
+            const preview = document.getElementById(`preview-${fieldId}`);
+            
+            input.value = '';
+            preview.classList.remove('active');
+            delete fieldValues[fieldId];
+            
+            updateProgress();
+        }
+
+        // Clear signature
+        function clearSignature(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if (canvas.signaturePad) {
+                canvas.signaturePad.clear();
+            }
+        }
+
+        // Save signature
+        function saveSignature(fieldId) {
+            const canvas = document.getElementById(`sig-${fieldId}`);
+            if (canvas.signaturePad && !canvas.signaturePad.isEmpty()) {
+                fieldValues[fieldId] = canvas.signaturePad.toDataURL();
+                showToast('Signature saved', 'success');
+                updateProgress();
+            } else {
+                showToast('Please draw your signature first', 'warning');
+            }
+        }
+
+        // Submit form
+        async function submitForm(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = ' Submitting...';
+            
+            try {
+                // Collect all field values
+                const form = document.getElementById('dynamic-form');
+                const formData = new FormData(form);
+                
+                // Add signature and file data
+                Object.entries(fieldValues).forEach(([key, value]) => {
+                    if (value instanceof File) {
+                        formData.append(key, value);
+                    } else if (key.startsWith('sig-')) {
+                        formData.append(key, value);
+                    }
+                });
+                
+                // Submit to API
+                const response = await fetch(`/api/forms/${formId}/submit`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Submission failed');
+                }
+                
+                // Show thank you message
+                document.getElementById('form-content').style.display = 'none';
+                document.getElementById('thank-you-state').style.display = 'block';
+                
+            } catch (error) {
+                showToast('Error submitting form: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = ' Submit Form';
+            }
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const fields = formData.schema?.fields || [];
+            const totalFields = fields.length;
+            const filledFields = fields.filter(field => {
+                const value = fieldValues[field.id || field.name];
+                return value && value.toString().trim() !== '';
+            }).length;
+            
+            const progress = (filledFields / totalFields) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+        }
+
+        // Show error
+        function showError(message) {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('form-container').innerHTML = `
+                <div class="form-header" style="background: var(--danger);">
+                    <h1 class="form-title">Error Loading Form</h1>
+                </div>
+                <div class="form-body" style="text-align: center; padding: 60px;">
+                    <div style="font-size: 60px; margin-bottom: 20px;"></div>
+                    <p style="color: var(--gray-600); margin-bottom: 30px;">${message}</p>
+                    <a href="/forms" class="btn-submit" style="width: auto; padding: 12px 40px; text-decoration: none;">
+                        Back to Forms
+                    </a>
+                </div>
+            `;
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '' : type === 'error' ? '' : ''}</span>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' bytes';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
+
+        // Simple SignaturePad implementation
+        class SignaturePad {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.drawing = false;
+                
+                this.setupEvents();
+            }
+            
+            setupEvents() {
+                this.canvas.addEventListener('mousedown', () => this.startDrawing());
+                this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+                this.canvas.addEventListener('mouseup', () => this.stopDrawing());
+                this.canvas.addEventListener('mouseout', () => this.stopDrawing());
+                
+                // Touch events
+                this.canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.startDrawing();
+                });
+                this.canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault();
+                    this.draw(e.touches[0]);
+                });
+                this.canvas.addEventListener('touchend', () => this.stopDrawing());
+            }
+            
+            startDrawing() {
+                this.drawing = true;
+                this.ctx.beginPath();
+            }
+            
+            draw(e) {
+                if (!this.drawing) return;
+                
+                const rect = this.canvas.getBoundingClientRect();
+                const x = (e.clientX - rect.left) * (this.canvas.width / rect.width);
+                const y = (e.clientY - rect.top) * (this.canvas.height / rect.height);
+                
+                this.ctx.lineWidth = 2;
+                this.ctx.lineCap = 'round';
+                this.ctx.strokeStyle = '#000';
+                
+                this.ctx.lineTo(x, y);
+                this.ctx.stroke();
+                this.ctx.beginPath();
+                this.ctx.moveTo(x, y);
+            }
+            
+            stopDrawing() {
+                this.drawing = false;
+            }
+            
+            clear() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            }
+            
+            isEmpty() {
+                const pixels = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height).data;
+                return !pixels.some(pixel => pixel !== 0);
+            }
+            
+            toDataURL() {
+                return this.canvas.toDataURL();
+            }
+            
+            fromDataURL(dataURL) {
+                const img = new Image();
+                img.onload = () => {
+                    this.ctx.drawImage(img, 0, 0);
+                };
+                img.src = dataURL;
+            }
+        }
+    </script>
+</body>
+</html>

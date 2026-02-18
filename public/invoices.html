@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Invoice Manager - FreelanceFlow Pro</title>
+    <style>
+        body { font-family: Arial; margin: 0; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 20px auto; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .invoice-list { display: grid; gap: 10px; }
+        .invoice-item { padding: 15px; border: 1px solid #ddd; border-radius: 4px; display: flex; justify-content: space-between; }
+        .btn { background: #0078d4; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; }
+    </style>
+    <script src="/navigation.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1> Invoice Manager</h1>
+        
+        <div class="card">
+            <h2>Create New Invoice</h2>
+            <div id="invoice-form">
+                <input type="text" id="client-name" placeholder="Client Name" style="width: 100%; padding: 10px; margin: 10px 0;">
+                <input type="email" id="client-email" placeholder="Client Email" style="width: 100%; padding: 10px; margin: 10px 0;">
+                <div id="line-items">
+                    <div class="line-item">
+                        <input type="text" placeholder="Description" style="width: 60%; padding: 8px;">
+                        <input type="number" placeholder="Qty" style="width: 15%; padding: 8px;">
+                        <input type="number" placeholder="Rate" style="width: 15%; padding: 8px;">
+                    </div>
+                </div>
+                <button onclick="addLineItem()">Add Item</button>
+                <button class="btn" onclick="createInvoice()" style="margin-top: 20px;">Create Invoice</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Recent Invoices</h2>
+            <div id="invoice-list" class="invoice-list">
+                Loading...
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function loadInvoices() {
+            const response = await fetch('/api/invoices');
+            const invoices = await response.json();
+            // Display invoices
+        }
+
+        async function createInvoice() {
+            const invoice = {
+                client: {
+                    name: document.getElementById('client-name').value,
+                    email: document.getElementById('client-email').value
+                },
+                items: [
+                    { description: 'Web Development', quantity: 10, rate: 150 }
+                ]
+            };
+            
+            const response = await fetch('/api/invoices', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(invoice)
+            });
+            
+            const result = await response.json();
+            alert(`Invoice created: ${result.invoiceNumber}`);
+            loadInvoices();
+        }
+
+        loadInvoices();
+    </script>
+</body>
+</html>

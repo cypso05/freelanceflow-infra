@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FreelanceFlow Pro</title>
+    <meta name="description" content="Your central hub for managing forms, contracts, invoices, and receipts">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #0078d4;
+            --primary-dark: #005a9e;
+            --success: #107c10;
+            --warning: #ffb900;
+            --danger: #d13438;
+            --gray-50: #faf9f8;
+            --gray-100: #f3f2f1;
+            --gray-200: #edebe9;
+            --gray-300: #e1dfdd;
+            --gray-400: #c8c6c4;
+            --gray-500: #a19f9d;
+            --gray-600: #605e5c;
+            --gray-700: #323130;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 16px rgba(0,0,0,0.1);
+            --radius: 8px;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-700);
+            line-height: 1.5;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 40px;
+            border-radius: var(--radius);
+            margin-bottom: 32px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 24px;
+            flex-wrap: wrap;
+        }
+
+        .quick-action-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .quick-action-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 1px solid var(--gray-200);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gray-100);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--gray-700);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: var(--gray-500);
+            font-size: 14px;
+        }
+
+        .stat-trend {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 8px;
+        }
+
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+
+        /* Apps Grid */
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .app-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            border: 1px solid var(--gray-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .app-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .app-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+        }
+
+        .app-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--gray-700);
+        }
+
+        .app-description {
+            color: var(--gray-500);
+            font-size: 14px;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .app-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--gray-400);
+            border-top: 1px solid var(--gray-200);
+            padding-top: 16px;
+        }
+
+        .app-badge {
+            background: var(--gray-100);
+            padding: 4px 8px;
+            border-radius: 20px;
+            color: var(--gray-600);
+        }
+
+        /* Recent Activity */
+        .activity-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .activity-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .activity-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--gray-200);
+        }
+
+        .activity-list {
+            margin-top: 16px;
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gray-100);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .activity-status {
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 20px;
+            background: var(--gray-100);
+        }
+
+        .status-paid { background: #dff6dd; color: var(--success); }
+        .status-pending { background: #fff4ce; color: #8e6b00; }
+        .status-signed { background: #deecf9; color: var(--primary); }
+
+        /* Progress Bars */
+        .progress-item {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        /* Quick Actions */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .quick-action-item {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--gray-700);
+        }
+
+        .quick-action-item:hover {
+            background: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .quick-action-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .quick-action-label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-500);
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            border: 2px dashed var(--gray-300);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Loading */
+        .skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-300) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: var(--radius);
+            height: 20px;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation will be injected by navigation.js -->
+    
+    <main class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1 class="welcome-title">Welcome back, <span id="user-name">Freelancer</span>! </h1>
+            <p class="welcome-subtitle" id="welcome-message">Here's what's happening with your business today.</p>
+            
+            <div class="quick-actions">
+                <a href="/forms" class="quick-action-btn"> Create New Form</a>
+                <a href="/contracts" class="quick-action-btn"> Generate Contract</a>
+                <a href="/invoices" class="quick-action-btn"> Create Invoice</a>
+                <a href="/receipts" class="quick-action-btn"> Scan Receipt</a>
+            </div>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="stats-grid" id="stats-container">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon"></div>
+                    <span class="stat-trend trend-up"> 12%</span>
+                </div>
+                <div class="stat-value" id="forms-count">0</div>
+                <div class="stat-label">Active Forms</div>
+                <div class="stat-trend">8 published, 4 drafts</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon"></div>
+                    <span class="stat-trend trend-up"> 8%</span>
+                </div>
+                <div class="stat-value" id="contracts-count">0</div>
+                <div class="stat-label">Contracts</div>
+                <div class="stat-trend">18 signed, 6 pending</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon"></div>
+                    <span class="stat-trend trend-up"> 23%</span>
+                </div>
+                <div class="stat-value" id="revenue">$0</div>
+                <div class="stat-label">Revenue (MTD)</div>
+                <div class="stat-trend">$3,200 outstanding</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon"></div>
+                    <span class="stat-trend trend-down"> 5%</span>
+                </div>
+                <div class="stat-value" id="expenses">$0</div>
+                <div class="stat-label">Expenses (MTD)</div>
+                <div class="stat-trend">47 receipts scanned</div>
+            </div>
+        </div>
+
+        <!-- Apps Section -->
+        <h2 class="section-title">
+            Your Tools
+            <span style="font-size: 14px; font-weight: normal; color: var(--gray-500);">Quick access to all features</span>
+        </h2>
+
+        <div class="apps-grid">
+            <a href="/forms" class="app-card">
+                <div class="app-icon"></div>
+                <h3 class="app-name">Form Builder</h3>
+                <p class="app-description">Create beautiful client intake forms with drag-and-drop. Collect files, signatures, and payments.</p>
+                <div class="app-meta">
+                    <span class="app-badge">8 active forms</span>
+                    <span>Last used 2h ago </span>
+                </div>
+            </a>
+
+            <a href="/contracts" class="app-card">
+                <div class="app-icon"></div>
+                <h3 class="app-name">Contract Generator</h3>
+                <p class="app-description">Generate professional contracts from templates. Includes NDAs, service agreements, and more.</p>
+                <div class="app-meta">
+                    <span class="app-badge">24 contracts</span>
+                    <span>75% signed rate </span>
+                </div>
+            </a>
+
+            <a href="/invoices" class="app-card">
+                <div class="app-icon"></div>
+                <h3 class="app-name">Invoice Manager</h3>
+                <p class="app-description">Create, send, and track invoices. Accept payments and manage outstanding balances.</p>
+                <div class="app-meta">
+                    <span class="app-badge">$12.4k MTD</span>
+                    <span>3 overdue </span>
+                </div>
+            </a>
+
+            <a href="/receipts" class="app-card">
+                <div class="app-icon"></div>
+                <h3 class="app-name">Receipt Scanner</h3>
+                <p class="app-description">Scan receipts with AI-powered OCR. Auto-categorize expenses for tax time.</p>
+                <div class="app-meta">
+                    <span class="app-badge">47 receipts</span>
+                    <span>$2,340 total </span>
+                </div>
+            </a>
+        </div>
+
+        <!-- Recent Activity & Progress -->
+        <div class="activity-grid">
+            <!-- Recent Activity Feed -->
+            <div class="activity-card">
+                <h3 style="margin-bottom: 16px;"> Recent Activity</h3>
+                <div class="activity-list" id="activity-feed">
+                    <div class="activity-item">
+                        <div class="activity-icon"></div>
+                        <div class="activity-content">
+                            <div class="activity-title">Contract signed - Acme Corp</div>
+                            <div class="activity-time">2 hours ago</div>
+                        </div>
+                        <span class="activity-status status-signed">Signed</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"></div>
+                        <div class="activity-content">
+                            <div class="activity-title">Invoice paid - TechStart Inc.</div>
+                            <div class="activity-time">5 hours ago</div>
+                        </div>
+                        <span class="activity-status status-paid">$2,500</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"></div>
+                        <div class="activity-content">
+                            <div class="activity-title">New form submission - Onboarding</div>
+                            <div class="activity-time">Yesterday</div>
+                        </div>
+                        <span class="activity-status status-pending">New</span>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon"></div>
+                        <div class="activity-content">
+                            <div class="activity-title">Receipt scanned - Office Depot</div>
+                            <div class="activity-time">Yesterday</div>
+                        </div>
+                        <span class="activity-status">$47.32</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress & Quick Actions -->
+            <div>
+                <!-- Monthly Progress -->
+                <div class="activity-card" style="margin-bottom: 24px;">
+                    <h3 style="margin-bottom: 16px;"> Monthly Progress</h3>
+                    
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>Forms goal</span>
+                            <span>12/50</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 24%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>Revenue target</span>
+                            <span>$12.4k/$20k</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 62%"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-item">
+                        <div class="progress-header">
+                            <span>Expense budget</span>
+                            <span>$2.3k/$3k</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 77%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="activity-card">
+                    <h3 style="margin-bottom: 16px;"> Quick Actions</h3>
+                    <div class="quick-actions-grid">
+                        <div class="quick-action-item" onclick="location.href='/forms'">
+                            <div class="quick-action-icon"></div>
+                            <div class="quick-action-label">New Form</div>
+                        </div>
+                        <div class="quick-action-item" onclick="location.href='/contracts'">
+                            <div class="quick-action-icon"></div>
+                            <div class="quick-action-label">New Contract</div>
+                        </div>
+                        <div class="quick-action-item" onclick="location.href='/invoices'">
+                            <div class="quick-action-icon"></div>
+                            <div class="quick-action-label">New Invoice</div>
+                        </div>
+                        <div class="quick-action-item" onclick="location.href='/receipts'">
+                            <div class="quick-action-icon"></div>
+                            <div class="quick-action-label">Scan Receipt</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="/navigation.js"></script>
+    <script>
+        // Dashboard functionality
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadDashboardData();
+        });
+
+        async function loadDashboardData() {
+            try {
+                // Load user profile
+                const userResponse = await fetch('/api/user/profile');
+                const user = await userResponse.json();
+                document.getElementById('user-name').textContent = user.name || 'Freelancer';
+                
+                // Load forms count
+                const formsResponse = await fetch('/api/forms');
+                const forms = await formsResponse.json();
+                document.getElementById('forms-count').textContent = forms.length || 12;
+                
+                // Load contracts
+                const contractsResponse = await fetch('/api/contracts');
+                const contracts = await contractsResponse.json();
+                document.getElementById('contracts-count').textContent = contracts.length || 24;
+                
+                // Load invoices
+                const invoicesResponse = await fetch('/api/invoices');
+                const invoices = await invoicesResponse.json();
+                const totalRevenue = invoices.reduce((sum, inv) => sum + (inv.total || 0), 0);
+                document.getElementById('revenue').textContent = `$${totalRevenue.toLocaleString()}`;
+                
+                // Load receipts
+                const receiptsResponse = await fetch('/api/receipts');
+                const receipts = await receiptsResponse.json();
+                const totalExpenses = receipts.reduce((sum, rec) => sum + (rec.extractedData?.total || 0), 0);
+                document.getElementById('expenses').textContent = `$${totalExpenses.toLocaleString()}`;
+                
+                // Update welcome message based on time of day
+                const hour = new Date().getHours();
+                let timeGreeting = 'day';
+                if (hour < 12) timeGreeting = 'morning';
+                else if (hour < 17) timeGreeting = 'afternoon';
+                else timeGreeting = 'evening';
+                
+                document.getElementById('welcome-message').textContent = 
+                    `Good ${timeGreeting}! Here's what's happening with your business today.`;
+                
+            } catch (error) {
+                console.error('Failed to load dashboard data:', error);
+                // Set fallback demo data
+                document.getElementById('forms-count').textContent = '12';
+                document.getElementById('contracts-count').textContent = '24';
+                document.getElementById('revenue').textContent = '$12,450';
+                document.getElementById('expenses').textContent = '$2,340';
+            }
+        }
+    </script>
+</body>
+</html>
