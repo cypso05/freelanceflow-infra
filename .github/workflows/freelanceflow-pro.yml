@@ -1,4 +1,4 @@
-name: FreelanceFlow Pro CI/CD
+ name: FreelanceFlow Pro CI/CD
 
 on:
   push:
@@ -59,7 +59,7 @@ jobs:
       - name: Install Dependencies
         run: |
           cd api
-          npm install --production
+          npm ci --production
         working-directory: ./
 
       - name: Run API Tests (if any)
@@ -78,6 +78,7 @@ jobs:
           action: "upload"
           app_location: "/public"
           api_location: "/api"
+          api_language: "node"
           output_location: ""
           skip_app_build: true
           skip_api_build: true
