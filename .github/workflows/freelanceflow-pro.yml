@@ -1,4 +1,4 @@
- name: FreelanceFlow Pro CI/CD
+name: FreelanceFlow Pro CI/CD
 
 on:
   push:
@@ -15,17 +15,22 @@ jobs:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
+
     steps:
-      - uses: actions/checkout@v3
+      # 1️⃣ Checkout repository
+      - name: Checkout Repository
+        uses: actions/checkout@v3
         with:
           submodules: true
           lfs: false
 
+      # 2️⃣ Setup Node
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      # 3️⃣ Create Azure Functions local.settings.json
       - name: Create local.settings.json from secrets
         run: |
           cat > api/local.settings.json << 'EOF'
@@ -44,45 +49,35 @@ jobs:
             }
           }
           EOF
-          echo "✅ Created api/local.settings.json from secrets"
+          echo "✅ Created api/local.settings.json"
 
-      - name: Create .env file for reference (optional)
-        run: |
-          cat > .env << 'EOF'
-          COSMOS_DATABASE_NAME=${{ secrets.COSMOS_DATABASE_NAME }}
-          BLOB_CONTAINER_NAME=${{ secrets.BLOB_CONTAINER_NAME }}
-          ALLOWED_ORIGINS=${{ secrets.ALLOWED_ORIGINS }}
-          NODE_ENV=production
-          EOF
-          echo "✅ Created .env file"
+      # 4️⃣ Install API dependencies (include dev for tests)
+      - name: Install API Dependencies
+        working-directory: ./api
+        run: npm ci
 
-      - name: Install Dependencies
-        run: |
-          cd api
-          npm ci --production
-        working-directory: ./
-
-      - name: Run API Tests (if any)
-        run: |
-          cd api
-          npm test || echo "No tests found"
-        working-directory: ./
+      # 5️⃣ Run tests (optional but recommended)
+      - name: Run API Tests
+        working-directory: ./api
+        run: npm test
         continue-on-error: true
 
-      - name: Build And Deploy
+      # 6️⃣ Deploy to Azure Static Web Apps
+      - name: Build and Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_FIELD_057DD3003 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: "upload"
           app_location: "/public"
           api_location: "/api"
-          api_language: "node"
           output_location: ""
           skip_app_build: true
-          skip_api_build: true
+          # IMPORTANT: DO NOT skip API build
+          skip_api_build: false
 
+      # 7️⃣ Output deployment URL
       - name: Output Deployment URL
         run: |
           echo "✅ Deployment complete!"
@@ -93,10 +88,10 @@ jobs:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
     runs-on: ubuntu-latest
     name: Close Pull Request Job
+
     steps:
-      - name: Close Pull Request
-        id: closepullrequest
+      - name: Close Pull Request Deployment
         uses: Azure/static-web-apps-deploy@v1
         with:
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_KIND_FIELD_057DD3003 }}
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           action: "close"
