@@ -37,3 +37,7 @@ out/
 # Logs
 logs/
 *.log
+api/local.settings.json
+.env
+*.local.json
+
