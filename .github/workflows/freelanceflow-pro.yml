@@ -78,7 +78,6 @@ jobs:
           action: "upload"
           app_location: "/public"
           api_location: "/api"
-          api_runtime: "node:20"
           output_location: ""
           skip_app_build: true
           skip_api_build: true
